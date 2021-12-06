@@ -24,73 +24,82 @@ class _LoginForm extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        onChanged: () =>
-            setState(() => _btnEnabled = _formKey.currentState!.validate()),
-        autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-        child: Column(
-          children: <Widget>[
-            buildEmailFormField(),
-            SizedBox(height: 16.h,),
-            buildPasswordFormField(),
-            SizedBox(height: 35.h,),
-            Center(
-              child: SizedBox(
-                width: 314.w,
-                height: 60.h,
-                child: ElevatedButton(
-                  onPressed: () async{
-                   onLogin();
-                  },
-                  style:  ElevatedButton.styleFrom(
-                    elevation: 10,
-                    shadowColor: primaryColorDark,
-                    primary: primaryColorDark,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r), // <-- Radius
+      return SafeArea(child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          onChanged: () =>
+              setState(() => _btnEnabled = _formKey.currentState!.validate()),
+          autovalidateMode: _autoValidate
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
+          child: Column(
+            children: <Widget>[
+              buildEmailFormField(),
+              SizedBox(height: 16.h,),
+              buildPasswordFormField(),
+              SizedBox(height: 35.h,),
+              Center(
+                child: SizedBox(
+                  width: 314.w,
+                  height: 60.h,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        await _controller.loginUser(
+                            _controller.emailController.text,
+                            _controller.passwordController.text);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        shadowColor: primaryColorDark,
+                        primary: primaryColorDark,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10.r), // <-- Radius
+                        ),
+                        textStyle: AppTextStyles.btnText
                     ),
-                    textStyle: AppTextStyles.btnText
-                  ),
-                  child: const Text(
-                    "Login",
+                    child: const Text(
+                      "Login",
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 41.h,),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget> [
-                Text("Are you new here?",
-                  style: AppTextStyles.subText1
-                ),
-                GestureDetector(
-                  onTap: (){
-                    Get.offAllNamed(AppRoutes.signUp);
-                  },
-                  child: Text("Create an account",
-                    style: AppTextStyles.subText
+              SizedBox(height: 41.h,),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Are you new here?",
+                      style: AppTextStyles.subText1
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.offAllNamed(AppRoutes.signUp);
+                    },
+                    child: Text("Create an account",
+                        style: AppTextStyles.subText
+                    ),
+                  ),
 
-              ],
-            )
-          ],
-        ),
-      ),
-    ));
+                ],
+              )
+            ],
+          ),
+        ),)
+      );
+
+
   }
-  onLogin()async {
-    if (_formKey.currentState!.validate()) {
-      await _controller.loginUser(_controller.emailController.text, _controller.passwordController.text);
-    }else{
-      setState(() {
-        _autoValidate = true;
-      });
-    }
-  }
+  // onLogin()async {
+  //   if (_formKey.currentState!.validate()) {
+  //     await _controller.loginUser(_controller.emailController.text, _controller.passwordController.text);
+  //   }else{
+  //     setState(() {
+  //       _autoValidate = true;
+  //     });
+  //   }
+  // }
 
 
   TextFormField buildEmailFormField() {
@@ -125,7 +134,7 @@ class _LoginForm extends State<LoginForm> {
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
-      keyboardType: TextInputType.phone,
+      keyboardType: TextInputType.text,
       style: AppTextStyles.inputText,
       controller: _controller.passwordController,
       onSaved: (value) {

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:userbook/core/utils/app_color.dart';
 import 'package:userbook/core/utils/app_text_styles.dart';
-import 'package:userbook/core/utils/notifier.dart';
 import 'package:userbook/presentation/controllers/sign_up_controller.dart';
 import 'package:userbook/presentation/routes/app_routes.dart';
 
@@ -22,75 +21,80 @@ class _SignUpForm extends State<SignUpForm>{
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Form(
-          key: _formKey,
-          onChanged: () =>
-              setState(() => _btnEnabled = _formKey.currentState!.validate()),
-          autovalidateMode: _autoValidate
-              ? AutovalidateMode.always
-              : AutovalidateMode.disabled,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 16.h,),
-              buildEmailFormField(),
-              SizedBox(height: 16.h,),
-              buildPasswordFormField(),
-              SizedBox(height: 35.h,),
-              Center(
-                child: SizedBox(
-                  width: 314.w,
-                  height: 60.h,
-                  child: ElevatedButton(
-                    onPressed:(){
-                          onRegister();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        elevation: 10,
-                        shadowColor: primaryColorDark,
-                        primary: primaryColorDark,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.r), // <-- Radius
-                        ),
-                        textStyle: AppTextStyles.btnText
-                    ),
-                    child: const Text(
-                      "Continue",
+   return Form(
+            key: _formKey,
+            onChanged: () =>
+                setState(() => _btnEnabled = _formKey.currentState!.validate()),
+            autovalidateMode: _autoValidate
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 16.h,),
+                buildEmailFormField(),
+                SizedBox(height: 16.h,),
+                buildPasswordFormField(),
+                SizedBox(height: 35.h,),
+                Center(
+                  child: SizedBox(
+                    width: 314.w,
+                    height: 60.h,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          await _controller.registerUser(
+                              _controller.emailController.text,
+                              _controller.passwordController.text);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          shadowColor: primaryColorDark,
+                          primary: primaryColorDark,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.r), // <-- Radius
+                          ),
+                          textStyle: AppTextStyles.btnText
+                      ),
+                      child: const Text(
+                        "Continue",
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 41.h,),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Already have an Account?",
-                      style: AppTextStyles.subText1),
-                  GestureDetector(
-                    onTap: (){
-                      Get.toNamed(AppRoutes.login);
-                    },
-                    child: Text("Sign in",
-                        style: AppTextStyles.subText
+                SizedBox(height: 41.h,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Already have an Account?",
+                        style: AppTextStyles.subText1),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.login);
+                      },
+                      child: Text("Sign in",
+                          style: AppTextStyles.subText
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ));
-    });
+
+
+                  ],
+                )
+              ],
+            ));
+
     }
 
-  onRegister()async {
-    if (_formKey.currentState!.validate()) {
-      await _controller.registerUser(_controller.emailController.text, _controller.passwordController.text);
-    }else{
-      setState(() {
-        _autoValidate = true;
-      });
-    }
-  }
+  // onRegister()async {
+  //   if (_formKey.currentState!.validate()) {
+  //     await _controller.registerUser(_controller.emailController.text, _controller.passwordController.text);
+  //   }else{
+  //     setState(() {
+  //       _autoValidate = true;
+  //     });
+  //   }
+  // }
 
   TextFormField buildEmailFormField() {
     return TextFormField(
@@ -124,6 +128,7 @@ class _SignUpForm extends State<SignUpForm>{
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
+      keyboardType: TextInputType.text,
       style: AppTextStyles.inputText,
       controller: _controller.passwordController,
       onSaved: (value) {

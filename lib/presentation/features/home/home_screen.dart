@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:userbook/core/data/remote/auth_manager.dart';
+import 'package:userbook/presentation/routes/app_routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               onPressed: () {
                 _authManager.logOut();
+                Get.offAllNamed(AppRoutes.login);
+
               },
               icon: const Icon(Icons.logout_rounded))
         ],

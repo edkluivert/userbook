@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:userbook/core/data/remote/auth_manager.dart';
+import 'package:userbook/core/utils/notifier.dart';
+import 'package:userbook/core/utils/show_loading.dart';
 import 'package:userbook/data/model/sign_up_request_model.dart';
 import 'package:userbook/data/services/auth_service.dart';
+import 'package:userbook/presentation/routes/app_routes.dart';
 
 
 class SignUpController extends GetxController{
@@ -14,6 +18,7 @@ class SignUpController extends GetxController{
 
   late final AuthService _authService;
   late final AuthenticationManager _authManager;
+
 
 
   @override
@@ -53,15 +58,20 @@ class SignUpController extends GetxController{
   }
 
   Future<void> registerUser(String email, String password) async {
+
+    showLoading();
     final response = await _authService
         .fetchRegister(RegisterRequestModel(email: email, password: password));
 
     if (response != null) {
       /// Set isLogin to true
-      const CircularProgressIndicator();
+
       _authManager.login(response.token);
+      _clearControllers();
+      Get.offAllNamed(AppRoutes.home);
     } else {
       /// Show user a dialog about the error response
+      dismissLoadingWidget();
       Get.defaultDialog(
           middleText: 'Register Error',
           textConfirm: 'OK',
@@ -71,5 +81,11 @@ class SignUpController extends GetxController{
           });
     }
   }
+
+  _clearControllers(){
+    emailController.clear();
+    passwordController.clear();
+  }
+
 }
 
