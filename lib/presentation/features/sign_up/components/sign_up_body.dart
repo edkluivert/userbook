@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:userbook/core/app_color.dart';
-import 'package:userbook/core/app_string.dart';
+import 'package:userbook/core/utils/app_color.dart';
+import 'package:userbook/core/utils/app_string.dart';
 import 'package:userbook/presentation/features/sign_up/components/sign_up_form.dart';
 
 class SignUpBody extends StatelessWidget{

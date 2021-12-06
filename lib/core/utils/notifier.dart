@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../app_color.dart';
+import 'app_color.dart';
 
 
 

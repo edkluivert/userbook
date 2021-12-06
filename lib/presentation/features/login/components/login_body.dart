@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:userbook/core/app_color.dart';
-import 'package:userbook/core/app_string.dart';
-import 'package:userbook/core/app_text_styles.dart';
+import 'package:userbook/core/utils/app_color.dart';
+import 'package:userbook/core/utils/app_string.dart';
+import 'package:userbook/core/utils/app_text_styles.dart';
 
 import 'login_form.dart';
 

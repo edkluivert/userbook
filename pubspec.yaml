@@ -35,12 +35,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_screenutil: ^5.0.0+2
-  shimmer: ^2.0.0
   get: ^4.3.8
   equatable: ^2.0.3
   google_fonts: ^2.1.0
   flutter_svg: ^0.22.0
-  get_storage:
+  get_storage: ^2.0.3
   dio: ^4.0.4
   flutter_easyloading: ^3.0.0
   json_annotation: ^4.0.1
@@ -49,8 +48,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.0.6
-  json_serializable: ^4.1.3
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

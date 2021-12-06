@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:userbook/core/app_color.dart';
-import 'package:userbook/core/app_text_styles.dart';
+import 'package:userbook/core/utils/app_color.dart';
+import 'package:userbook/core/utils/app_text_styles.dart';
 import 'package:userbook/core/utils/notifier.dart';
 import 'package:userbook/presentation/controllers/sign_up_controller.dart';
-import 'package:userbook/presentation/features/sign_up/state/sign_up_state.dart';
+import 'package:userbook/presentation/routes/app_routes.dart';
+
 
 class SignUpForm extends StatefulWidget{
   @override
@@ -41,9 +42,9 @@ class _SignUpForm extends State<SignUpForm>{
                   width: 314.w,
                   height: 60.h,
                   child: ElevatedButton(
-                    onPressed:_controller.state is SignUpLoading
-                        ? () {}
-                        : onRegister,
+                    onPressed:(){
+                          onRegister();
+                    },
                     style: ElevatedButton.styleFrom(
                         elevation: 10,
                         shadowColor: primaryColorDark,
@@ -66,15 +67,14 @@ class _SignUpForm extends State<SignUpForm>{
                 children: <Widget>[
                   Text("Already have an Account?",
                       style: AppTextStyles.subText1),
-                  Text("Sign in",
-                      style: AppTextStyles.subText
+                  GestureDetector(
+                    onTap: (){
+                      Get.toNamed(AppRoutes.login);
+                    },
+                    child: Text("Sign in",
+                        style: AppTextStyles.subText
+                    ),
                   ),
-                  if (_controller.state is SignUpFailure)
-                   Notifier.snackbar("Error", (_controller.state as SignUpFailure).error),
-                  if (_controller.state is SignUpLoading)
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    )
                 ],
               )
             ],
@@ -84,8 +84,7 @@ class _SignUpForm extends State<SignUpForm>{
 
   onRegister()async {
     if (_formKey.currentState!.validate()) {
-      _controller.createAccount(email: _controller.emailController.text,
-          password: _controller.passwordController.text);
+      await _controller.registerUser(_controller.emailController.text, _controller.passwordController.text);
     }else{
       setState(() {
         _autoValidate = true;

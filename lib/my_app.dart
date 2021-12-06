@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:userbook/presentation/routes/app_pages.dart';
 import 'package:userbook/presentation/routes/app_routes.dart';
 
-import 'core/app_color.dart';
+import 'core/utils/app_color.dart';
+import 'presentation/features/splash/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.signUp,
+        home : SplashScreen(),
         getPages: AppPages.list,
     ),
     );

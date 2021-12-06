@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:userbook/core/data/remote/auth_manager.dart';
+import 'package:userbook/data/model/login_request_model.dart';
+import 'package:userbook/data/services/auth_service.dart';
 
 class LoginController extends GetxController{
 
@@ -8,12 +11,17 @@ class LoginController extends GetxController{
   var email = '';
   var password = '';
 
+  late final AuthService _authService;
+  late final AuthenticationManager _authManager;
 
   @override
   void onInit() {
     super.onInit();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    _authService = Get.find();
+    _authManager = Get.find();
+
   }
 
   @override
@@ -41,5 +49,25 @@ class LoginController extends GetxController{
       return "Password must be of 6 characters";
     }
     return null;
+  }
+
+  Future<void> loginUser(String email, String password) async {
+    final response = await _authService
+        .fetchLogin(LoginRequestModel(email: email, password: password));
+
+    if (response != null) {
+      /// Set isLogin to true
+      const CircularProgressIndicator();
+      _authManager.login(response.token);
+    } else {
+      /// Show user a dialog about the error response
+      Get.defaultDialog(
+          middleText: 'User not found!',
+          textConfirm: 'OK',
+          confirmTextColor: Colors.white,
+          onConfirm: () {
+            Get.back();
+          });
+    }
   }
 }
